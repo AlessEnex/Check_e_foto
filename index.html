@@ -7,17 +7,22 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar glass">
+  <header class="topbar">
     <h1>Check & Foto pre-bunker</h1>
-    <button id="sendEmailBtn" class="btn-primary">Invia via e-mail</button>
+    <button id="sendEmailBtn" class="btn-primary" type="button">Invia via e-mail</button>
+    <!-- Anchor fallback per mailto -->
+    <a id="mailtoLink" href="#" style="position:absolute; left:-9999px; top:-9999px;">mailto</a>
   </header>
 
   <main class="container">
-    <p class="hint">Compila le righe utili (puoi lasciarne vuote). Orari: 08:00 → 18:00. La fine parte da +2h ma è modificabile.</p>
-    <div id="rowsContainer" class="rows"></div>
+    <p class="hint">
+      Compila le righe utili (puoi lasciarne vuote). Orari: 08:00 → 18:00. La fine parte da +2h ma è modificabile.
+    </p>
+
+    <div id="rowsContainer" class="rows"><!-- righe generate da app.js --></div>
   </main>
 
-  <footer class="footer glass">
+  <footer class="footer">
     <small>Mobile-friendly • ISO week Europa/Roma • mailto con oggetto auto</small>
   </footer>
 

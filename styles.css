@@ -1,150 +1,172 @@
-/* ===== Reset anti-accavallamento ===== */
+/* ========= Reset & base ========= */
 * { box-sizing: border-box; }
 html, body { height: 100%; }
-body{
+body {
+  margin: 0;
+  color: #fff;
+  font: 14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background: linear-gradient(135deg, #1c1f26, #01123f) fixed;
-  color:#fff;
-  font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  margin:0;
 }
 
-/* ===== Layout base ===== */
-.container{ max-width:1100px; margin:16px auto; padding:0 12px; }
-.hint{ opacity:.8; margin:8px 0 16px; }
+/* ========= Layout comuni ========= */
+.container { max-width: 1100px; margin: 16px auto; padding: 0 12px; }
+.hint { opacity: .8; margin: 8px 0 16px; }
 
-.topbar{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:10px 14px; margin:0; position:sticky; top:0; z-index:10;
-  background: rgba(255,255,255,.08); backdrop-filter: blur(8px);
-}
-.footer{ opacity:.7; text-align:center; padding:14px; margin-top:20px; background: rgba(255,255,255,.06); }
-
-.rows{ display:grid; gap:10px; }
-.row{
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 10;
+  padding: 10px 14px; margin: 0;
   background: rgba(255,255,255,.08);
   backdrop-filter: blur(8px);
-  border-radius:12px; padding:10px; border:1px solid rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.footer {
+  opacity: .7; text-align: center; padding: 14px; margin-top: 20px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.06);
 }
 
-/* ===== Griglia riga robusta ===== */
-.row-grid{
-  display:grid;
-  gap:10px;
-  align-items:start;
+/* ========= Card/righe ========= */
+.rows { display: grid; gap: 10px; }
+.row {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.06);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* ========= Griglia riga: allineamento perfetto ========= */
+/* Tutte le colonne usano minmax(0,...) per impedire overflow e accavallamenti */
+.row-grid {
+  display: grid;
+  gap: 10px;
+  align-items: center; /* tutti allineati sull’asse orizzontale */
   grid-template-columns:
-    minmax(0, 1.1fr)   /* N° commessa */
+    minmax(0, 1.1fr)   /* Numero commessa */
     minmax(0, 110px)   /* Anno */
     minmax(0, 1.6fr)   /* Testo fisso + Data */
     minmax(0, 130px)   /* Ora inizio */
-    minmax(0, 130px)   /* Ora fine   */
-    minmax(0, 1.3fr)   /* Radio Linee*/
+    minmax(0, 130px)   /* Ora fine */
+    minmax(0, 1.3fr)   /* Linee (3 toggle) */
   ;
 }
-@media (max-width: 1080px){
-  .row-grid{
-    grid-template-columns: 1fr 110px 1fr 130px 130px 1fr;
-  }
+@media (max-width: 980px) {
+  .row-grid { grid-template-columns: 1fr 110px 1fr 130px 130px 1fr; }
 }
-@media (max-width: 900px){
-  .row-grid{ grid-template-columns: 1fr 1fr; }
+@media (max-width: 900px) {
+  .row-grid { grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 560px){
-  .row-grid{ grid-template-columns: 1fr; }
+@media (max-width: 560px) {
+  .row-grid { grid-template-columns: 1fr; }
 }
 
-/* ===== Campi e label ===== */
-.field{ display:flex; flex-direction:column; min-width:0; }
-.label-fixed{ font-size:.78rem; opacity:.85; margin:0 0 .35rem; }
-.custom-text-input{ display:grid; gap:.3rem; }
-.custom-text-input label{ font-size:.82rem; opacity:.9; margin:0; }
+/* ========= Blocchi campo ========= */
+.field { display: flex; flex-direction: column; min-width: 0; }
+.custom-text-input { display: grid; gap: .30rem; }
 
-/* Inputs/select uniformi e non “ingombranti” */
+/* Etichette con altezza coerente per fixare l’asse orizzontale degli input */
+.custom-text-input label,
+.label-fixed {
+  font-size: .82rem;
+  line-height: 1.2;
+  opacity: .85;
+  margin: 0 0 4px;
+  min-height: 18px;
+}
+
+/* ========= Inputs & select ========= */
+:root {
+  --control-h: 36px;
+  --bd: 1px solid rgba(255,255,255,.70);
+  --bd-focus: #fff;
+  --glow: 0 0 0 3px rgba(255,255,255,.25);
+}
+
 .custom-text-input input[type="text"],
 .custom-text-input input[type="number"],
 .custom-text-input input[type="date"],
-.custom-text-input select{
-  width:100%; min-width:0;           /* <<< chiave per non rompere la griglia */
-  height:36px;
-  padding:0 .65rem;
-  background:transparent;
-  border:1px solid rgba(255,255,255,.7);
-  color:#fff; border-radius:.55rem; outline:none;
+.custom-text-input select {
+  width: 100%;
+  min-width: 0;             /* evita che “spingano” fuori dalla colonna */
+  height: var(--control-h);
+  padding: 0 .65rem;
+  background: transparent;
+  border: var(--bd);
+  color: #fff;
+  border-radius: .55rem;
+  outline: none;
   transition: box-shadow .2s, background-color .2s, border-color .2s;
-  appearance: none;                   /* evita select “larghe” su alcuni browser */
+  appearance: none;         /* select più compatte */
 }
-.custom-text-input input[type="date"]{ padding-right:2.2rem; }
+.custom-text-input input::placeholder { color: rgba(255,255,255,.65); }
 .custom-text-input input:focus,
-.custom-text-input select:focus{
-  border-color:#fff; background:rgba(0,0,0,.22);
-  box-shadow:0 0 0 3px rgba(255,255,255,.25);
+.custom-text-input select:focus {
+  border-color: var(--bd-focus);
+  background: rgba(0,0,0,.22);
+  box-shadow: var(--glow);
 }
 
-
-/* ===== Radio pills: solo 3 bottoni senza riquadro ===== */
-.custom-radio{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap:.5rem;
-  align-items:center;
-  border: none;       /* <<< niente cornice fieldset */
-  margin: 0; padding: 0;
+/* Input data: sfondo leggermente più chiaro per vedere l’icona calendario bianca */
+.custom-text-input input[type="date"] {
+  background-color: rgba(255,255,255,.12);
+  padding-right: 2.2rem; /* spazio per l’icona nativa */
 }
 
-.custom-radio > legend{
-  display: none;      /* <<< sparisce il testo "Disponibile in linea" */
+/* ========= Radio pills (3 toggle, senza riquadro/legend) ========= */
+.custom-radio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .5rem;
+  align-items: center;
+  border: none; margin: 0; padding: 0;
+}
+@media (max-width: 560px) {
+  .custom-radio { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 380px) {
+  .custom-radio { grid-template-columns: 1fr; }
 }
 
-.custom-radio input[type="radio"]{
-  position:absolute; opacity:0; pointer-events:none;
+.custom-radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
-
-.custom-radio label{
-  display:flex; justify-content:center; align-items:center;
-  height:36px; padding:0 .9rem; white-space:nowrap;
-  border:1px solid rgba(255,255,255,.7); border-radius:9999px;
-  cursor:pointer; user-select:none;
+.custom-radio label {
+  display: flex; justify-content: center; align-items: center;
+  height: var(--control-h);
+  padding: 0 1rem;
+  white-space: nowrap;
+  border: var(--bd);
+  border-radius: 9999px;
+  cursor: pointer; user-select: none;
   transition: transform .06s, background-color .2s, color .2s, border-color .2s;
 }
-.custom-radio label:hover{ transform:translateY(-1px); }
-.custom-radio input[type="radio"]:checked + label{
-  background:#fff; color:#000; border-color:#fff;
+.custom-radio label:hover { transform: translateY(-1px); }
+.custom-radio input[type="radio"]:checked + label {
+  background: #fff; color: #000; border-color: #fff;
 }
 
-
-
-
-
-
-
-
-
-
-@media (max-width: 560px){
-  .custom-radio{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-}
-@media (max-width: 380px){
-  .custom-radio{ grid-template-columns: 1fr; }
-}
-
-/* ===== Button ===== */
-.btn-primary{
-  background:#fff; color:#000; height:38px; padding:0 1.1rem;
-  border-radius:9999px; font-weight:600; border:none; cursor:pointer;
-  box-shadow:0 10px 24px rgba(0,0,0,.25);
+/* ========= Bottoni ========= */
+.btn-primary {
+  background: #fff; color: #000;
+  height: calc(var(--control-h) + 2px);
+  padding: 0 1.1rem;
+  border: none; border-radius: 9999px;
+  font-weight: 600; cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
   transition: transform .06s, box-shadow .2s, background-color .2s, color .2s;
 }
-.btn-primary:hover{ transform:translateY(-1px); box-shadow:0 14px 30px rgba(0,0,0,.32); }
-
-
-/* Nascondo l’icona nativa su Chrome/Edge */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  display: none;
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.32);
 }
 
-/* Aggiungo icona custom */
-.custom-text-input input[type="date"] {
-  background: url('calendar-icon.svg') no-repeat right 8px center;
-  background-size: 18px;
-  padding-right: 28px; /* spazio per l’icona */
+/* ========= Utility “glass” se vuoi riutilizzare classi esistenti ========= */
+.glass {
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px;
 }
