@@ -1,172 +1,215 @@
-/* ========= Reset & base ========= */
-* { box-sizing: border-box; }
-html, body { height: 100%; }
-body {
+/* ====== RESET ====== */
+* {
+  box-sizing: border-box;
   margin: 0;
-  color: #fff;
-  font: 14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: linear-gradient(135deg, #1c1f26, #01123f) fixed;
+  padding: 0;
+  font-family: system-ui, sans-serif;
 }
 
-/* ========= Layout comuni ========= */
-.container { max-width: 1100px; margin: 16px auto; padding: 0 12px; }
-.hint { opacity: .8; margin: 8px 0 16px; }
+body {
+  background: #f5f5f5;
+  color: #222;
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
+body.dark {
+  background: #1c1f26;
+  color: #eee;
+}
+
+/* ====== HEADER ====== */
 .topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 10;
-  padding: 10px 14px; margin: 0;
-  background: rgba(255,255,255,.08);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,.06);
-}
-.footer {
-  opacity: .7; text-align: center; padding: 14px; margin-top: 20px;
-  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: transparent;
 }
 
-/* ========= Card/righe ========= */
-.rows { display: grid; gap: 10px; }
+h1 {
+  font-size: 1.2rem;
+}
+
+/* ====== BUTTONS ====== */
+.btn-primary,
+.btn-secondary {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary {
+  background: #0077ff;
+  color: #fff;
+}
+body.dark .btn-primary {
+  background: #3399ff;
+}
+
+.btn-secondary {
+  margin-left: 1rem;
+  background: #ccc;
+  color: #222;
+}
+body.dark .btn-secondary {
+  background: #444;
+  color: #fff;
+}
+
+/* ====== CONTAINER ====== */
+.container {
+  padding: 1rem;
+}
+.hint {
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+/* ====== GRID RIGHE ====== */
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .row {
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.06);
-  backdrop-filter: blur(8px);
+  padding: 1rem;
   border-radius: 12px;
-  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* ========= Griglia riga: allineamento perfetto ========= */
-/* Tutte le colonne usano minmax(0,...) per impedire overflow e accavallamenti */
 .row-grid {
   display: grid;
-  gap: 10px;
-  align-items: center; /* tutti allineati sull’asse orizzontale */
-  grid-template-columns:
-    minmax(0, 1.1fr)   /* Numero commessa */
-    minmax(0, 110px)   /* Anno */
-    minmax(0, 1.6fr)   /* Testo fisso + Data */
-    minmax(0, 130px)   /* Ora inizio */
-    minmax(0, 130px)   /* Ora fine */
-    minmax(0, 1.3fr)   /* Linee (3 toggle) */
-  ;
-}
-@media (max-width: 980px) {
-  .row-grid { grid-template-columns: 1fr 110px 1fr 130px 130px 1fr; }
-}
-@media (max-width: 900px) {
-  .row-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 560px) {
-  .row-grid { grid-template-columns: 1fr; }
-}
-
-/* ========= Blocchi campo ========= */
-.field { display: flex; flex-direction: column; min-width: 0; }
-.custom-text-input { display: grid; gap: .30rem; }
-
-/* Etichette con altezza coerente per fixare l’asse orizzontale degli input */
-.custom-text-input label,
-.label-fixed {
-  font-size: .82rem;
-  line-height: 1.2;
-  opacity: .85;
-  margin: 0 0 4px;
-  min-height: 18px;
-}
-
-/* ========= Inputs & select ========= */
-:root {
-  --control-h: 36px;
-  --bd: 1px solid rgba(255,255,255,.70);
-  --bd-focus: #fff;
-  --glow: 0 0 0 3px rgba(255,255,255,.25);
-}
-
-.custom-text-input input[type="text"],
-.custom-text-input input[type="number"],
-.custom-text-input input[type="date"],
-.custom-text-input select {
-  width: 100%;
-  min-width: 0;             /* evita che “spingano” fuori dalla colonna */
-  height: var(--control-h);
-  padding: 0 .65rem;
-  background: transparent;
-  border: var(--bd);
-  color: #fff;
-  border-radius: .55rem;
-  outline: none;
-  transition: box-shadow .2s, background-color .2s, border-color .2s;
-  appearance: none;         /* select più compatte */
-}
-.custom-text-input input::placeholder { color: rgba(255,255,255,.65); }
-.custom-text-input input:focus,
-.custom-text-input select:focus {
-  border-color: var(--bd-focus);
-  background: rgba(0,0,0,.22);
-  box-shadow: var(--glow);
-}
-
-/* Input data: sfondo leggermente più chiaro per vedere l’icona calendario bianca */
-.custom-text-input input[type="date"] {
-  background-color: rgba(255,255,255,.12);
-  padding-right: 2.2rem; /* spazio per l’icona nativa */
-}
-
-/* ========= Radio pills (3 toggle, senza riquadro/legend) ========= */
-.custom-radio {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: .5rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
   align-items: center;
-  border: none; margin: 0; padding: 0;
-}
-@media (max-width: 560px) {
-  .custom-radio { grid-template-columns: repeat(2, minmax(0,1fr)); }
-}
-@media (max-width: 380px) {
-  .custom-radio { grid-template-columns: 1fr; }
 }
 
-.custom-radio input[type="radio"] {
-  position: absolute;
+/* ====== INPUTS ====== */
+.custom-text-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.custom-text-input label {
+  font-size: 0.8rem;
+  transition: color 0.3s ease;
+}
+
+/* Light mode */
+body:not(.dark) .custom-text-input label {
+  color: #222;
+}
+body:not(.dark) .custom-text-input input,
+body:not(.dark) .custom-text-input select {
+  background: #fff;
+  color: #222;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px;
+}
+
+/* Dark mode */
+body.dark .custom-text-input label {
+  color: #eee;
+}
+body.dark .custom-text-input input,
+body.dark .custom-text-input select {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 6px;
+}
+
+/* ====== DATE PICKER ====== */
+/* Nascondo l’icona nativa */
+input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none; /* non cliccabile, JS gestisce l’apertura */
 }
+
+/* Icona custom light */
+body:not(.dark) input[type="date"] {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 24 24'><path d='M7 10h5v5H7v-5zm12-5h-1V3h-2v2H8V3H6v2H5c-1.11 0-1.99.89-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.11-.9-2-2-2zm0 14H5V9h14v10z'/></svg>") no-repeat right 8px center;
+  background-size: 18px;
+  padding-right: 28px;
+}
+
+/* Icona custom dark */
+body.dark input[type="date"] {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'><path d='M7 10h5v5H7v-5zm12-5h-1V3h-2v2H8V3H6v2H5c-1.11 0-1.99.89-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.11-.9-2-2-2zm0 14H5V9h14v10z'/></svg>") no-repeat right 8px center;
+  background-size: 18px;
+  padding-right: 28px;
+}
+
+/* ====== RADIO BUTTONS (Linee) ====== */
+.custom-radio {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.custom-radio input {
+  display: none;
+}
+
 .custom-radio label {
-  display: flex; justify-content: center; align-items: center;
-  height: var(--control-h);
-  padding: 0 1rem;
-  white-space: nowrap;
-  border: var(--bd);
-  border-radius: 9999px;
-  cursor: pointer; user-select: none;
-  transition: transform .06s, background-color .2s, color .2s, border-color .2s;
-}
-.custom-radio label:hover { transform: translateY(-1px); }
-.custom-radio input[type="radio"]:checked + label {
-  background: #fff; color: #000; border-color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #888;
+  cursor: pointer;
+  font-size: 0.8rem;
 }
 
-/* ========= Bottoni ========= */
-.btn-primary {
-  background: #fff; color: #000;
-  height: calc(var(--control-h) + 2px);
-  padding: 0 1.1rem;
-  border: none; border-radius: 9999px;
-  font-weight: 600; cursor: pointer;
-  box-shadow: 0 10px 24px rgba(0,0,0,.25);
-  transition: transform .06s, box-shadow .2s, background-color .2s, color .2s;
+.custom-radio input:checked + label {
+  background: #0077ff;
+  color: #fff;
+  border-color: #0077ff;
 }
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 30px rgba(0,0,0,.32);
+body.dark .custom-radio input:checked + label {
+  background: #3399ff;
+  border-color: #3399ff;
 }
 
-/* ========= Utility “glass” se vuoi riutilizzare classi esistenti ========= */
-.glass {
-  background: rgba(255,255,255,.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 12px;
+/* ====== FOOTER ====== */
+.footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+
+/* ====== SELECT OPTIONS ====== */
+
+/* Light mode */
+body:not(.dark) select {
+  background: #fff;
+  color: #222;
+  border: 1px solid #ccc;
+}
+body:not(.dark) select option {
+  background: #fff;
+  color: #222;
+}
+
+/* Dark mode */
+body.dark select {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid #555;
+}
+body.dark select option {
+  background: #1c1f26; /* sfondo scuro coerente */
+  color: #fff;
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  pointer-events: none; /* così non blocca il click */
 }

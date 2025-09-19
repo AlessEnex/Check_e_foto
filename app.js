@@ -34,6 +34,7 @@ function getISOWeekNumber(date = new Date()) {
 document.addEventListener("DOMContentLoaded", () => {
   const rowsContainer = document.getElementById("rowsContainer");
   const sendBtn = document.getElementById("sendEmailBtn");
+  const mailtoLink = document.getElementById("mailtoLink");
   const hours = generateTimeOptions(START_TIME, END_TIME, STEP_MIN);
 
   function makeSelect(options, attrs = {}) {
@@ -131,44 +132,65 @@ document.addEventListener("DOMContentLoaded", () => {
     return row;
   }
 
+  // Costruisci le righe
   for (let i = 1; i <= ROW_COUNT; i++) rowsContainer.appendChild(createRow(i));
 
   // ====== EMAIL ======
-sendBtn.addEventListener("click", () => {
-  const rows = [...document.querySelectorAll(".row")];
-  const data = rows.map((row, idx) => {
-    const comm = row.querySelector(`#commessa_${idx+1}`).value.trim();
-    const year = row.querySelector(`#anno_${idx+1}`).value.trim();
-    const date = row.querySelector(`#data_${idx+1}`).value;
-    const start = row.querySelector(`#start_${idx+1}`).value;
-    const end   = row.querySelector(`#end_${idx+1}`).value;
-    const selectedRadio = row.querySelector(`input[name="linea_${idx+1}"]:checked`);
-    const line = selectedRadio ? selectedRadio.value : "";
-    return { comm, year, date, start, end, line };
-  }).filter(r => r.comm || r.date);
+  sendBtn.addEventListener("click", () => {
+    const rows = [...document.querySelectorAll(".row")];
+    const data = rows.map((row, idx) => {
+      const comm = row.querySelector(`#commessa_${idx+1}`).value.trim();
+      const year = row.querySelector(`#anno_${idx+1}`).value.trim();
+      const date = row.querySelector(`#data_${idx+1}`).value;
+      const start = row.querySelector(`#start_${idx+1}`).value;
+      const end   = row.querySelector(`#end_${idx+1}`).value;
+      const selectedRadio = row.querySelector(`input[name="linea_${idx+1}"]:checked`);
+      const line = selectedRadio ? selectedRadio.value : "";
+      return { comm, year, date, start, end, line };
+    }).filter(r => r.comm || r.date);
 
-  const commesse = [...new Set(data.map(d => d.comm).filter(Boolean))];
-  const week = getISOWeekNumber(new Date());
-  const subject = `Check e foto pre-bunker (commesse: ${commesse.length ? commesse.join(", ") : "—"}) - Week ${week}`;
+    const commesse = [...new Set(data.map(d => d.comm).filter(Boolean))];
+    const week = getISOWeekNumber(new Date());
+    const subject = `Check e foto pre-bunker (commesse: ${commesse.length ? commesse.join(", ") : "—"}) - Week ${week}`;
 
-  // Corpo leggibile
-  let body = "--- CHECK & FOTO PRE-BUNKER ---\n\n";
-  data.forEach(d => {
-    const dd = d.date ? d.date.split("-").reverse().join("/") : "—";
-    body += `Commessa: ${d.comm || "—"} | Anno: ${d.year || "—"}\n`;
-    body += `Data: ${dd} | Orario: ${d.start || "—"} - ${d.end || "—"} | Linea: ${d.line || "—"}\n\n`;
+    let body = "--- CHECK & FOTO PRE-BUNKER ---\n\n";
+    data.forEach(d => {
+      const dd = d.date ? d.date.split("-").reverse().join("/") : "—";
+      body += `Commessa: ${d.comm || "—"} | Anno: ${d.year || "—"}\n`;
+      body += `Data: ${dd} | Orario: ${d.start || "—"} - ${d.end || "—"} | Linea: ${d.line || "—"}\n\n`;
+    });
+    if (!data.length) body += "Nessuna riga compilata.\n";
+
+    const to = RECIPIENTS.join(";");
+    const url = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    mailtoLink.setAttribute("href", url);
+    mailtoLink.click();
   });
-  if (!data.length) body += "Nessuna riga compilata.\n";
 
-  const to = RECIPIENTS.join(";");
-  const url = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  // ====== THEME TOGGLE ======
+  const themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+    });
+  }
 
-  console.log("DEBUG: provo ad aprire Outlook con", url);
+    // ====== DATEPICKER FULL CELL CLICK ======
+    document.querySelectorAll(".custom-text-input input[type='date']").forEach(input => {
+      const parent = input.parentElement;
+      parent.style.cursor = "pointer";
 
-  // Usa l'anchor nascosta dell'HTML
-  const mailtoLink = document.getElementById("mailtoLink");
-  mailtoLink.setAttribute("href", url);
-  mailtoLink.click();
-});
+      parent.addEventListener("click", () => {
+        // forza il click sull'input
+        if (typeof input.showPicker === "function") {
+          input.showPicker();   // Chrome/Edge moderni
+        } else {
+          input.focus();        // Safari/Firefox
+          input.click();        // forza apertura se serve
+        }
+      });
+    });
 
 });
