@@ -194,3 +194,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+self.addEventListener("install", (e) => {
+  console.log("Service Worker installed");
+});
+
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
