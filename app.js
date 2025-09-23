@@ -6,7 +6,8 @@ const RECIPIENTS = [
   "marco.lazzarin@enextechnologies.com",
   "giacomo.reato@enextechnologies.com",
   "nicolo.mattiuzzo@enextechnologies.com",
-  "enrico.saccon@enextechnologies.com"
+  "enrico.saccon@enextechnologies.com",
+  "alessio.burakowski@enextechnologies.com"
 ];
 
 const START_TIME = "08:00";
